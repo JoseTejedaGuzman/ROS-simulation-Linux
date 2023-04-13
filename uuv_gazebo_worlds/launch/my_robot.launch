@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+	<launch>
+		
+		<arg name="gui" default="true"/>
+    		<arg name="paused" default="false"/>
+    		<arg name="set_timeout" default="false"/>
+   	  	<arg name="timeout" default="0.0"/>
+   	  	
+   	  	<arg name="x" default="0"/>
+    		<arg name="y" default="0"/>
+    		<arg name="z" default="-70"/>
+		
+		<include file="$(find uuv_gazebo)/launch/rexrov_demos/rexrov_wrench_control.launch">
+		<arg name="world_name" value="$(find robot)/worlds/empty_underwater.world"/>
+		
+       	<arg name="paused" value="$(arg paused)"/>
+        	<arg name="use_sim_time" value="true"/>
+        	<arg name="gui" value="$(arg gui)"/>
+        	<arg name="headless" value="false"/>
+        	<arg name="debug" value="false"/>
+        	<arg name="verbose" value="true"/>
+        	<arg name="recording" value="false"/>
+        	<arg name="x" value="$(arg x)"/>
+    		<arg name="y" value="$(arg y)"/>
+    		<arg name="z" value="$(arg z)"/>
+        	
+		</include>
+		
+		<node pkg="uuv_teleop"
+		type="similar_teleop_twist.py"
+		name="teleop"
+		output="screen">
+    		</node>
+		
+		<include file="$(find uuv_assistants)/launch/thruster_node.launch">
+		
+		<node pkg="uuv_assistants"
+			type="thruster_node.py"
+			name="thruster_node"
+			output="screen">
+
+		</node>
+		
+		<node pkg="uuv_assistants"
+			type="Thruster_client.py"
+			name="Thruster_client"
+			output="screen">
+			
+		</node>
+		
+		<node name="spawn_urdf"
+		pkg = "uuv_gazebo_worlds"
+		type = "spawn_model"
+		args = "-param -x 13 -y -13 -z 1.2 -urdf -model robot"/>
+		
+	</launch>
