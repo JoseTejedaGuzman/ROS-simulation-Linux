@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<launch>
+
+<!--Creating Gazebo world based on the arguments previoulsy made
+x, y, z arguments for the free movement in the space-->
+
+    <arg name="namespace" default="rexrov"/>
+    <arg name="x" default="0"/>
+    <arg name="y" default="0"/>
+    <arg name="z" default="-70"/>
+    
+<!--Launching user interface window of Gazebo to have visual representation-->
+    <arg name="gui" default="true"/>
+<!--Gazebo starts running since the first moment is called-->
+    <arg name="paused" default="false"/>
+<!--Timeout to set teleop_twist_keyboard parameters is not added in Gazebo-->
+    <arg name="set_timeout" default="false"/>
+<!--As mentioned before, timeout is not added, this means default values are equalize to zero-->
+    <arg name="timeout" default="0.0"/>
+
+<!--Launching rexrov in uuv_gazebo/rexrov_default.launch-->
+    <include file="$(find uuv_gazebo)/launch/rexrov_demos/rexrov_wrench_control.launch">
+<!--Empty_uderwater.world is given as a value for the argument 'name = world_value'-->
+        <arg name="world_name" value="worlds/empty_underwater.world"/>
+<!--Calling the value previously defined as argument-->
+        <arg name="paused" value="$(arg paused)"/>
+<!--Telling the nodes to get Gazebo-publised time -->
+        <arg name="use_sim_time" value="true"/>
+<!--Calling the value previously defined as argument-->
+        <arg name="gui" value="$(arg gui)"/>
+<!--Unable recording for Gazebo state-->
+        <arg name="headless" value="false"/>
+        <arg name="debug" value="false"/>
+<!--Allowing gzserver and gzclient printing errors and warnings to the terminal-->
+        <arg name="verbose" value="true"/>
+        <arg name="namespace" value="$(arg namespace)"/>
+<!--Calling arguments-->
+    	<arg name="x" value="$(arg x)"/>
+    	<arg name="y" value="$(arg y)"/>
+    	<arg name="z" value="$(arg z)"/>
+    </include>
+
+<!--Including Teleop_twist_keyboard node in such a way it can be used to control the ROV.-->
+
+<!--Package where the node is allocated, its type and method used as output must be mentioned-->
+    <node pkg="uuv_teleop"
+	type="similar_teleop_twist.py"
+	name="teleop"
+	output="screen">
+    </node>
