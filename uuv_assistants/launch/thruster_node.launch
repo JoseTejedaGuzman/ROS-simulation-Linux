@@ -1,0 +1,6 @@
+<launch>
+    <node name="thruster_node" 
+    	pkg="uuv_assistants" 
+    	type="thruster_node.py" 
+    	output="screen"/>
+</launch>
